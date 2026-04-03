@@ -12,11 +12,16 @@ const Hero = () => {
       {/* Name */}
       <h1 className="text-4xl md:text-6xl font-bold mb-4">Viktor Shutak</h1>
 
-      <p className="text-xl text-blue-400 mb-6">Frontend Developer</p>
+      <p className="text-xl text-blue-400 mb-6">
+        Frontend Developer (React / TypeScript)
+      </p>
 
       <p className="max-w-xl text-gray-300 mb-8">
-        I develop web applications using React, TypeScript and modern tools.
-        Focused on clean code, user experience and scalable solutions.
+        I am a Frontend Developer focused on building modern web applications
+        using React, TypeScript, and Node.js. I create responsive and
+        user-friendly interfaces, and I am continuously improving my skills
+        through real projects and structured learning. Currently, I am looking
+        for my first commercial experience and open to freelance opportunities.
       </p>
 
       {/* Buttons */}

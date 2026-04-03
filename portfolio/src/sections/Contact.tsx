@@ -28,7 +28,7 @@ const Contact = () => {
     setSuccess(false);
 
     try {
-      const response = await fetch("http://localhost:5001/contact", {
+      const response = await fetch("https://fullstack-portfolio-project-zirg.onrender.com/contact", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

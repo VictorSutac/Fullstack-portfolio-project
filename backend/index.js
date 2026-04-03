@@ -1,4 +1,6 @@
 require("dotenv").config();
+console.log("MONGO_URI:", process.env.MONGO_URI);
+console.log("EMAIL_USER:", process.env.EMAIL_USER);
 
 const express = require("express"); // это? express - это фреймворк для
 //  Node.js, который упрощает создание веб-приложений и API.
@@ -153,8 +155,8 @@ app.post("/contact", async (req, res) => {
 
     await newMessage.save();
     await transporter.sendMail({
-      from: '"Portfolio Site" <myspry@icloud.com>',
-      to: "myspry@icloud.com",
+      from: process.env.EMAIL_USER,
+      to: process.env.EMAIL_USER,
       subject: "New message from portfolio",
       text: `
 Name: ${name}
@@ -171,7 +173,8 @@ Message: ${message}
     res.status(500).json({ success: false });
   }
 });
-app.listen(5001, () => {
+const PORT = process.env.PORT || 5001;
+app.listen(PORT, () => {
   console.log("Server started on port 5001"); // это? app.listen(5001,
   // () => { ... }) - это метод, который запускает
   // ваш сервер и заставляет его слушать входящие запросы на указанном порту

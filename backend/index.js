@@ -178,7 +178,7 @@ app.post("/contact", async (req, res) => {
     //     });
     const { error } = await resend.emails.send({
       from: "Portfolio <onboarding@resend.dev>",
-      to: [process.env.EMAIL_TO],
+      to: process.env.EMAIL_TO,
       replyTo: email,
       subject: "New message from portfolio",
       text: `

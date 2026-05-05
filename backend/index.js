@@ -1,7 +1,6 @@
 require("dotenv").config();
-console.log("MONGO_URI:", process.env.MONGO_URI);
-console.log("EMAIL_USER:", process.env.EMAIL_USER);
-
+const { Resend } = require("resend");
+const resend = new Resend(process.env.RESEND_API_KEY);
 const express = require("express"); // это? express - это фреймворк для
 //  Node.js, который упрощает создание веб-приложений и API.
 //  Он предоставляет удобные методы для обработки маршрутов,
@@ -32,6 +31,7 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASS,
   },
 });
+
 const app = express(); // это? app - это экземпляр приложения, созданный с помощью
 // express. Он используется для настройки маршрутов, middleware
 // и других аспектов вашего веб-сервера. С помощью app вы можете
@@ -143,10 +143,22 @@ app.get("/", (req, res) => {
 
 app.post("/contact", async (req, res) => {
   try {
-    console.log("REQUEST BODY:", req.body);
+    console.log("New contact request received");
 
     const { name, email, message } = req.body;
+    if (!name?.trim() || !email?.trim() || !message?.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required",
+      });
+    }
 
+    if (!email.includes("@")) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid email",
+      });
+    }
     const newMessage = new Message({
       name,
       email,
@@ -154,9 +166,20 @@ app.post("/contact", async (req, res) => {
     });
 
     await newMessage.save();
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_USER,
+    //     await transporter.sendMail({
+    //       from: process.env.EMAIL_USER,
+    //       to: process.env.EMAIL_USER,
+    //       subject: "New message from portfolio",
+    //       text: `
+    // Name: ${name}
+    // Email: ${email}
+    // Message: ${message}
+    //   `,
+    //     });
+    const { error } = await resend.emails.send({
+      from: "Portfolio <onboarding@resend.dev>",
+      to: [process.env.EMAIL_TO],
+      replyTo: email,
       subject: "New message from portfolio",
       text: `
 Name: ${name}
@@ -165,17 +188,31 @@ Message: ${message}
   `,
     });
 
+    if (error) {
+      console.error("Resend error:", error);
+      return res.status(500).json({
+        success: false,
+        message: "Email sending failed",
+      });
+    }
     console.log("Saved to DB");
 
-    res.json({ success: true });
+    res.json({
+      success: true,
+      message: "Message sent successfully",
+    });
   } catch (error) {
     console.error("ERROR:", error);
-    res.status(500).json({ success: false });
+    // res.status(500).json({ success: false });
+    res.status(500).json({
+      success: false,
+      message: "Email sending failed",
+    });
   }
 });
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
-  console.log("Server started on port 5001"); // это? app.listen(5001,
+  console.log(`Server started on port ${PORT}`); // это? app.listen(5001,
   // () => { ... }) - это метод, который запускает
   // ваш сервер и заставляет его слушать входящие запросы на указанном порту
   //  (в данном случае, 5000).

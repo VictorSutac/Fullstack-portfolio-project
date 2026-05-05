@@ -166,6 +166,7 @@ app.post("/contact", async (req, res) => {
     });
 
     await newMessage.save();
+    // console.log("EMAIL_TO value:", process.env.EMAIL_TO);
     //     await transporter.sendMail({
     //       from: process.env.EMAIL_USER,
     //       to: process.env.EMAIL_USER,

@@ -5,7 +5,7 @@ const projects = [
       "Personal portfolio with a React frontend, Express API, MongoDB message storage, backend validation, rate limiting, and email delivery through Resend.",
     tech: ["React", "TypeScript", "Tailwind", "Node.js", "Express", "MongoDB"],
     github: "https://github.com/VictorSutac/Fullstack-portfolio-project",
-    demo: "",
+    demo: "https://fullstack-portfolio-project-hazel.vercel.app",
   },
 ];
 

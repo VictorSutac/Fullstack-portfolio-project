@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: fullstack-portfolio-api
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: MONGO_URI
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: EMAIL_TO
+        sync: false
+      - key: CLIENT_URL
+        sync: false
